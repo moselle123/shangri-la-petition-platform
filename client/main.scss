@@ -1,0 +1,62 @@
+@import "./theme.scss";
+
+html, body, #app {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+
+	touch-action: none;
+	user-select: none;
+}
+
+@font-face {
+	font-family: Poppins;
+	src: url(./assets/Poppins-Regular.ttf);
+}
+
+input[type=range]::-webkit-slider-thumb {
+	background: var(--el-color-primary);
+}
+
+#app {
+	margin: 0;
+
+	font-family: Poppins;
+	font-size: 14px;
+
+	overflow-y: auto;
+
+	.spinner {
+		height: 1em;
+		width: 1em;
+
+		animation: rotation 2s infinite linear;
+	}
+
+	@keyframes rotation {
+		from { transform: rotate(0deg); }
+		to   { transform: rotate(359deg); }
+	}
+
+	// element plus overrides
+	.el-row {
+		width: 100%;
+	}
+
+	.el-text {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.el-button {
+		width: 9em;
+
+		svg {
+			height: 1em;
+			margin-right: 7px;
+
+			color: inherit;
+		}
+	}
+}
