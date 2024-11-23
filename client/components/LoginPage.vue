@@ -41,7 +41,23 @@ export default {
 	},
 	methods: {
 		login() {
-
+			this.$refs['form'].validate((valid) => {
+				this.isValidAlert, this.isAccessDenied, this.isServerError = false;
+				if (valid) {
+					axios.post('http://localhost:3000/api/auth/login', this.loginDetails)
+					.then((res) => {
+						this.$router.push('dashboard');
+					})
+					.catch((err) => {
+						err.status === 401 ? this.isAccessDenied = true : this.isServerError = true;
+					});
+				} else {
+					this.isValidAlert = true;
+				}
+			});
+		},
+		register() {
+			this.$router.push('register');
 		},
 		checkEmptyString(rule, value, callback) {
 			if (!value.trim()) {
