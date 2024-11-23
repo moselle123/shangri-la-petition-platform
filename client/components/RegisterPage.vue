@@ -30,7 +30,7 @@
 				</el-col>
 			</el-row>
 		</el-form>
-		<el-button @click="register" :disabled="!valid">Register</el-button>
+		<el-text class="login-link" @click="login">Already have an account? Login here.</el-text>
 	</el-container>
 </template>
 <script>
@@ -121,6 +121,15 @@ export default {
 		.el-form-item {
 			margin-bottom: 1em;
 		}
+	}
+
+	.login-link {
+		margin-top: 1em;
+
+		color: #333;
+		text-decoration: underline;
+
+		cursor: pointer;
 	}
 }
 </style>

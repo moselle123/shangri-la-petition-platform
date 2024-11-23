@@ -12,7 +12,7 @@
 				<el-input v-model="loginDetails.password" type="password" placeholder="Enter your password"></el-input>
 			</el-form-item>
 		</el-form>
-		<el-button @click="login" :disabled="!valid">Login</el-button>
+		<el-text class="register-link" @click="register">Don't have an account? Register here.</el-text>
 	</el-container>
 </template>
 <script>
@@ -21,7 +21,7 @@ export default {
 		return {
 			valid: false,
 			loginDetails : {
-				username: null,
+				email: null,
 				password: null,
 			},
 			isValidAlert: false,
@@ -69,6 +69,16 @@ export default {
 	.el-form {
 		max-width: 600px;
 		width: 90%;
+		margin: 4em 0;
+	}
+
+	.register-link {
+		margin-top: 1em;
+
+		color: #333;
+		text-decoration: underline;
+
+		cursor: pointer;
 	}
 }
 </style>
