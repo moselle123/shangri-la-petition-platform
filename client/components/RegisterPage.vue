@@ -20,7 +20,7 @@
 				<el-input v-model="confirmPasswordField" type="password" placeholder="Enter your password again"></el-input>
 			</el-form-item>
 			<el-form-item label="Biometric ID" prop="bioId">
-				<el-input v-model="user.bioId" type="number" pattern="[0-9]*" placeholder="Enter your ID or scan the QR code below."/>
+						<el-input v-model="user.bioId" placeholder="Enter your ID or scan the QR code below."/>
 			</el-form-item>
 		</el-form>
 		<el-button @click="register" :disabled="!valid">Register</el-button>
@@ -61,7 +61,6 @@ export default {
 				],
 				bioId: [
 					{required: true, message: 'Biometric ID is required'},
-					{type: 'number', message: 'Biometric ID must contain numerical characters only.'},
 					{ min: 10, max: 10, message: 'Length should be 10 digits', trigger: 'blur'},
 				],
 			},
