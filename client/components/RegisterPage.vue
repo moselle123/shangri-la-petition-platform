@@ -30,6 +30,7 @@
 				</el-col>
 			</el-row>
 		</el-form>
+		<el-button @click="register">Register</el-button>
 		<el-text class="login-link" @click="login">Already have an account? Login here.</el-text>
 	</el-container>
 </template>
@@ -72,14 +73,6 @@ export default {
 				],
 			},
 		};
-	},
-	watch: {
-		user: {
-			handler(newValue, oldValue) {
-				this.$refs['form'].validate(valid => valid ? this.valid = true : this.valid = false);
-			},
-			deep: true,
-		},
 	},
 	methods: {
 		register() {

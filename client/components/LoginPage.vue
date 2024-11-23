@@ -12,6 +12,7 @@
 				<el-input v-model="loginDetails.password" type="password" placeholder="Enter your password"></el-input>
 			</el-form-item>
 		</el-form>
+		<el-button @click="login">Login</el-button>
 		<el-text class="register-link" @click="register">Don't have an account? Register here.</el-text>
 	</el-container>
 </template>
@@ -19,7 +20,6 @@
 export default {
 	data() {
 		return {
-			valid: false,
 			loginDetails : {
 				email: null,
 				password: null,
@@ -39,14 +39,6 @@ export default {
 			},
 		};
 	},
-	watch: {
-		user: {
-			handler(newValue, oldValue) {
-				this.$refs['form'].validate(valid => valid ? this.valid = true : this.valid = false);
-			},
-			deep: true,
-		},
-	},
 	methods: {
 		login() {
 
@@ -64,7 +56,6 @@ export default {
 <style lang="scss" scoped>
 .login {
 	align-items: center;
-	gap: 4em;
 
 	.el-form {
 		max-width: 600px;
