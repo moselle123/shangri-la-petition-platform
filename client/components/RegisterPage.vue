@@ -1,9 +1,12 @@
 <template>
 	<el-container class="register" direction="vertical">
 		<el-text size="large">Register</el-text>
+		<el-form ref="form" status-icon :rules="rules" label-width="150px" :model="user">
 			<el-alert v-if="isExistingUser" title="These credentials match an existing user, please login." type="error" />
 			<el-alert v-if="isValidAlert" title="Fix errors in form before continuing" type="error" />
 			<el-alert v-if="isServerError" title="Server error, please try again later." type="error" />
+			<el-row justify="space-evenly">
+				<el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
 					<el-form-item label="Email" prop="email">
 						<el-input v-model="user.email" type="email" placeholder="Enter your email"></el-input>
 			</el-form-item>
@@ -19,9 +22,13 @@
 			<el-form-item label="Confirm Password" prop="password">
 				<el-input v-model="confirmPasswordField" type="password" placeholder="Enter your password again"></el-input>
 			</el-form-item>
+				</el-col>
+				<el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
 			<el-form-item label="Biometric ID" prop="bioId">
 						<el-input v-model="user.bioId" placeholder="Enter your ID or scan the QR code below."/>
 			</el-form-item>
+				</el-col>
+			</el-row>
 		</el-form>
 		<el-button @click="register" :disabled="!valid">Register</el-button>
 	</el-container>
@@ -99,6 +106,13 @@ export default {
 .register {
 	align-items: center;
 	gap: 4em;
+
+	.divider {
+		height: 100%;
+		width: 1px;
+
+		background-color: var(--el-border-color);
+	}
 
 	.el-form {
 		max-width: 600px;
