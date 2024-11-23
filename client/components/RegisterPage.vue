@@ -9,24 +9,24 @@
 				<el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
 					<el-form-item label="Email" prop="email">
 						<el-input v-model="user.email" type="email" placeholder="Enter your email"></el-input>
-			</el-form-item>
-			<el-form-item label="Name" prop="name">
-				<el-input v-model="user.name" placeholder="Enter your Full Name"/>
-			</el-form-item>
-			<el-form-item label="Date of Birth" prop="dob">
+					</el-form-item>
+					<el-form-item label="Name" prop="name">
+						<el-input v-model="user.name" placeholder="Enter your Full Name"/>
+					</el-form-item>
+					<el-form-item label="Date of Birth" prop="dob">
 						<el-date-picker v-model="user.dob" type="date" placeholder="Enter your Date of Birth (DD/MM/YYYY)" format="DD/MM/YYYY" value-format="YYYY/MM/DD" popper-class="popover-hidden"/>
-			</el-form-item>
-			<el-form-item label="Password" prop="password">
-				<el-input v-model="user.password" type="password" placeholder="Enter your password"></el-input>
-			</el-form-item>
-			<el-form-item label="Confirm Password" prop="password">
-				<el-input v-model="confirmPasswordField" type="password" placeholder="Enter your password again"></el-input>
-			</el-form-item>
+					</el-form-item>
+					<el-form-item label="Password" prop="password">
+						<el-input v-model="user.password" type="password" placeholder="Enter your password"></el-input>
+					</el-form-item>
+					<el-form-item label="Confirm Password" prop="password">
+						<el-input v-model="confirmPasswordField" type="password" placeholder="Enter your password again"></el-input>
+					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-			<el-form-item label="Biometric ID" prop="bioId">
+					<el-form-item label="Biometric ID" prop="bioId">
 						<el-input v-model="user.bioId" placeholder="Enter your ID or scan the QR code below."/>
-			</el-form-item>
+					</el-form-item>
 				</el-col>
 			</el-row>
 		</el-form>
@@ -76,7 +76,22 @@ export default {
 	},
 	methods: {
 		register() {
-
+			this.$refs['form'].validate(valid => {
+				if (valid) {
+					axios.post('http://localhost:3000/api/auth/register', this.user)
+					.then(() => {
+						this.$router.push('login');
+					})
+					.catch((err) => {
+						err.status === 400 ? this.isExistingUser = true : this.isServerError = true;
+					});
+				} else {
+					this.isValidAlert = true;
+				}
+			});
+		},
+		login() {
+			this.$router.push('login');
 		},
 		checkEmptyString(rule, value, callback) {
 			if (!value.trim()) {
@@ -108,7 +123,6 @@ export default {
 	}
 
 	.el-form {
-		max-width: 600px;
 		width: 90%;
 
 		.el-form-item {
