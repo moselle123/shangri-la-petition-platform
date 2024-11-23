@@ -2,8 +2,9 @@
 	<el-container class="login" direction="vertical">
 		<el-text size="large">Login</el-text>
 		<el-form ref="form" status-icon :rules="rules" label-width="200px" :model="loginDetails">
-			<el-form-item label="Username" prop="username">
-				<el-input v-model="loginDetails.username" type="email" placeholder="Enter your email"></el-input>
+			<el-alert v-if="isAccessDenied" title="Email or password incorrect, please try again." type="error" />
+			<el-alert v-if="isValidAlert" title="Fix errors in form before continuing" type="error" />
+			<el-alert v-if="isServerError" title="Server error, please try again later." type="error" />
 			</el-form-item>
 			<el-form-item label="Password" prop="password">
 				<el-input v-model="loginDetails.password" type="password" placeholder="Enter your password"></el-input>
@@ -21,6 +22,9 @@ export default {
 				username: null,
 				password: null,
 			},
+			isValidAlert: false,
+			isAccessDenied: false,
+			isServerError: false,
 			rules: {
 				username: [
 					{required: true, message: 'Username is required'},

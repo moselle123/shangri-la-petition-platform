@@ -1,9 +1,9 @@
 <template>
 	<el-container class="register" direction="vertical">
 		<el-text size="large">Register</el-text>
-		<el-form ref="form" status-icon :rules="rules" label-width="200px" :model="user">
-			<el-form-item label="Username" prop="username">
-				<el-input v-model="user.username" type="email" placeholder="Enter your email"></el-input>
+			<el-alert v-if="isExistingUser" title="These credentials match an existing user, please login." type="error" />
+			<el-alert v-if="isValidAlert" title="Fix errors in form before continuing" type="error" />
+			<el-alert v-if="isServerError" title="Server error, please try again later." type="error" />
 			</el-form-item>
 			<el-form-item label="Name" prop="name">
 				<el-input v-model="user.name" placeholder="Enter your Full Name"/>
@@ -36,6 +36,9 @@ export default {
 				password: null,
 				bioId: null,
 			},
+			isValidAlert: false,
+			isExistingUser: false,
+			isServerError: false,
 			confirmPasswordField: null,
 			rules: {
 				username: [
