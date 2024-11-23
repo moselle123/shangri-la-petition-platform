@@ -4,6 +4,8 @@
 			<el-alert v-if="isExistingUser" title="These credentials match an existing user, please login." type="error" />
 			<el-alert v-if="isValidAlert" title="Fix errors in form before continuing" type="error" />
 			<el-alert v-if="isServerError" title="Server error, please try again later." type="error" />
+					<el-form-item label="Email" prop="email">
+						<el-input v-model="user.email" type="email" placeholder="Enter your email"></el-input>
 			</el-form-item>
 			<el-form-item label="Name" prop="name">
 				<el-input v-model="user.name" placeholder="Enter your Full Name"/>
@@ -30,7 +32,7 @@ export default {
 		return {
 			valid: false,
 			user : {
-				username: null,
+				email: null,
 				name: null,
 				dob: null,
 				password: null,
@@ -41,8 +43,8 @@ export default {
 			isServerError: false,
 			confirmPasswordField: null,
 			rules: {
-				username: [
-					{required: true, message: 'Username is required'},
+				email: [
+					{required: true, message: 'Email is required'},
 					{type: 'email', message: 'Please enter a valid email'},
 				],
 				name: [

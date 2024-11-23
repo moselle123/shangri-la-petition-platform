@@ -5,6 +5,8 @@
 			<el-alert v-if="isAccessDenied" title="Email or password incorrect, please try again." type="error" />
 			<el-alert v-if="isValidAlert" title="Fix errors in form before continuing" type="error" />
 			<el-alert v-if="isServerError" title="Server error, please try again later." type="error" />
+			<el-form-item label="Email" prop="email">
+				<el-input v-model="loginDetails.email" type="email" placeholder="Enter your email"></el-input>
 			</el-form-item>
 			<el-form-item label="Password" prop="password">
 				<el-input v-model="loginDetails.password" type="password" placeholder="Enter your password"></el-input>
@@ -26,8 +28,8 @@ export default {
 			isAccessDenied: false,
 			isServerError: false,
 			rules: {
-				username: [
-					{required: true, message: 'Username is required'},
+				email: [
+					{required: true, message: 'Email is required'},
 					{type: 'email', message: 'Please enter a valid email'},
 				],
 				password: [
