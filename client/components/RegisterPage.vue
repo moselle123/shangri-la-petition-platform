@@ -9,7 +9,7 @@
 				<el-input v-model="user.name" placeholder="Enter your Full Name"/>
 			</el-form-item>
 			<el-form-item label="Date of Birth" prop="dob">
-				<el-date-picker v-model="user.dob" type="date" placeholder="Enter your Date of Birth (DD/MM/YYYY)" format="DD/MM/YYYY" value-format="DD/MM/YYYY" popper-class="popover-hidden"/>
+						<el-date-picker v-model="user.dob" type="date" placeholder="Enter your Date of Birth (DD/MM/YYYY)" format="DD/MM/YYYY" value-format="YYYY/MM/DD" popper-class="popover-hidden"/>
 			</el-form-item>
 			<el-form-item label="Password" prop="password">
 				<el-input v-model="user.password" type="password" placeholder="Enter your password"></el-input>
