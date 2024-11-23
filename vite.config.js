@@ -8,7 +8,7 @@ export default defineConfig({
 	root: 'client',
 	publicDir: 'resources',
 	build: {
-		outDir:'./dist',
+		outDir:'../server/dist',
 		assetsDir: 'assets',
 		emptyOutDir: true,
 	},
