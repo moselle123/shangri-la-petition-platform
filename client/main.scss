@@ -59,4 +59,13 @@ input[type=range]::-webkit-slider-thumb {
 			color: inherit;
 		}
 	}
+
+	.el-card {
+		.el-card__header {
+			display: flex;
+			justify-content: space-between;
+
+			text-transform: capitalize;
+		}
+	}
 }

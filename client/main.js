@@ -9,16 +9,24 @@ import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginPage from './components/LoginPage.vue';
 import RegisterPage from './components/RegisterPage.vue';
-import DashboardPage from './components/PetitionerDashboardPage.vue';
+import PetitionerDashboardPage from './components/PetitionerDashboardPage.vue';
+import CommitteeDashboardPage from './components/CommitteeDashboardPage.vue';
 
 const routes = [
 	{
 		path: '/',
-		redirect: '/dashboard',
+		redirect: '/dashboard/petitioner',
 	},
 	{
-		path: '/dashboard',
-		component: DashboardPage,
+		path: '/dashboard/petitioner',
+		name: 'PetitionerDashboard',
+		component: PetitionerDashboardPage,
+		meta: { requiresAuth: true },
+	},
+	{
+		path: '/dashboard/committee',
+		name: 'CommitteeDashboard',
+		component: CommitteeDashboardPage,
 		meta: { requiresAuth: true },
 	},
 	{
@@ -44,6 +52,7 @@ import axios from 'axios';
 window.axios = axios;
 import { useCookies } from 'vue3-cookies';
 let {cookies} = useCookies();
+import { jwtDecode } from 'jwt-decode';
 
 axios.interceptors.request.use(
 	(config) => {
@@ -82,12 +91,13 @@ axios.interceptors.response.use(
 );
 
 router.beforeEach((to, from, next) => {
-	let isAuthenticated = !!cookies.get('authToken');
+	let token = cookies.get('authToken');
+	let isAuthenticated = !!token;
 
 	if (to.meta.requiresAuth && !isAuthenticated) {
 	  	next('/login');
 	} else if (to.path === '/login' && isAuthenticated) {
-	  	next('/dashboard');
+		jwtDecode(token).role === 'petitioner' ? next('/dashboard/petitioner') : next('/dashboard/committee');
 	} else {
 	  	next();
 	}
