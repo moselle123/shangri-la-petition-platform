@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
+import authenticate from '../middleware/authenticate.js';
 
 let router = express.Router();
 
@@ -49,8 +50,16 @@ router.post('/login', async (req, res) => {
 	})
 	.then((authenticated) => {
 		if (authenticated) {
-			let token = jwt.sign({ id: user._id, role: user.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-			res.status(200).json({token});
+			let accessToken = jwt.sign({id: user._id, role: user.role}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'});
+			let refreshToken = jwt.sign({id: user._id, role: user.role}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'});
+
+			res.cookie('refreshToken', refreshToken, {
+				httpOnly: true,
+				secure: true,
+				sameSite: 'Strict',
+				maxAge: 7 * 24 * 60 * 60 * 1000,
+			});
+			res.status(200).json({accessToken});
 		} else {
 			res.status(401).send('Invalid credentials');
 			console.error('Invalid credentials');
@@ -59,6 +68,30 @@ router.post('/login', async (req, res) => {
 	.catch((err) => {
 		res.status(500).send('Internal server error.');
 		console.error('Error during login: ', err);
+	});
+});
+
+router.post('/logout', (req, res) => {
+	res.clearCookie('refreshToken', {
+		httpOnly: true,
+		secure: true,
+		sameSite: 'Strict',
+	});
+	res.status(200).send('Logged out successfully');
+});
+
+router.post('/refresh-token', (req, res) => {
+	let refreshToken = req.cookies.refreshToken;
+
+	if (!refreshToken) {
+	  	return res.status(401).send('No refresh token provided');
+	}
+	jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+		if (err) {
+			return res.status(403).send('Invalid or expired refresh token');
+		}
+		let newAccessToken = jwt.sign({ id: user.id, role: user.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+		res.status(200).json({ accessToken: newAccessToken });
 	});
 });
 

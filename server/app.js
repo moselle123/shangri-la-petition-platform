@@ -4,12 +4,15 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './db.js';
 import authRoutes from './routes/auth.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 let app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+
 app.use('/api/auth', authRoutes);
 
 app.use("", express.static('dist'));

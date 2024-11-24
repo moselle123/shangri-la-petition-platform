@@ -49,7 +49,13 @@ export default {
 						this.$router.push('dashboard');
 					})
 					.catch((err) => {
-						err.status === 401 ? this.isAccessDenied = true : this.isServerError = true;
+						console.error(err);
+						if (err.status === 401) {
+							this.isAccessDenied = true;
+						}
+						if (err.status === 500) {
+							this.isServerError = true;
+						}
 					});
 				} else {
 					this.isValidAlert = true;
