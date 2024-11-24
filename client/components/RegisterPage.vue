@@ -78,7 +78,7 @@ export default {
 		register() {
 			this.$refs['form'].validate(valid => {
 				if (valid) {
-					axios.post('http://localhost:3000/api/auth/register', this.user)
+					axios.post('http://localhost:3000/slpp/auth/register', this.user)
 					.then(() => {
 						this.$router.push('login');
 					})

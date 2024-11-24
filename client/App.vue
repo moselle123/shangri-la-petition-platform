@@ -22,7 +22,7 @@ export default {
 	},
 	methods: {
 		logout() {
-			axios.post('http://localhost:3000/api/auth/logout')
+			axios.post('http://localhost:3000/slpp/auth/logout')
 			.catch((err) => {
 				console.error('Logout failed:', err);
 			});

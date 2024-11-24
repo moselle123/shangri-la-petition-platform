@@ -44,7 +44,7 @@ export default {
 			this.$refs['form'].validate((valid) => {
 				this.isValidAlert, this.isAccessDenied, this.isServerError = false;
 				if (valid) {
-					axios.post('http://localhost:3000/api/auth/login', this.loginDetails)
+					axios.post('http://localhost:3000/slpp/auth/login', this.loginDetails)
 					.then((res) => {
 						this.$router.push('dashboard');
 					})
