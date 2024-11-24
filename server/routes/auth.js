@@ -2,7 +2,6 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
-import authenticate from '../middleware/authenticate.js';
 
 let router = express.Router();
 
