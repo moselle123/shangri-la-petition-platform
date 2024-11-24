@@ -5,9 +5,7 @@
 				<el-menu-item>
 					<el-text size="large" tag="b">Shangri-La Petition Platform</el-text>
 				</el-menu-item>
-				<template>
-					<el-menu-item index="/">Dashboard</el-menu-item>
-				</template>
+				<el-menu-item @click="logout">Logout</el-menu-item>
 			</el-menu>
 		</el-header>
 		<el-main>
@@ -16,6 +14,21 @@
 	</el-container>
 </template>
 <script>
+export default {
+	data() {
+		return {
+
+		};
+	},
+	methods: {
+		logout() {
+			axios.post('http://localhost:3000/api/auth/logout')
+			.catch((err) => {
+				console.error('Logout failed:', err);
+			});
+		},
+	},
+};
 </script>
 <style lang="scss" scoped>
 .el-header {

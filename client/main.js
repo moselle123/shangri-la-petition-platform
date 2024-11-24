@@ -67,6 +67,10 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
 	(response) => {
+		if (response.data === 'Logged out successfully' && response.status === 200) {
+			cookies.remove('authToken');
+			router.push('/login');
+		}
 		if (response.data && response.data.accessToken) {
 			cookies.set('authToken', response.data.accessToken, { path: '/', expires: '15m' });
 		}
@@ -82,7 +86,7 @@ axios.interceptors.response.use(
 			})
 			.catch((refreshError) => {
 				console.error('Token refresh failed:', refreshError);
-				window.location.href = '/login';
+				router.push('/login');
 				return Promise.reject(refreshError);
 			});
 		}
