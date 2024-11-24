@@ -46,7 +46,7 @@ export default {
 				if (valid) {
 					axios.post('http://localhost:3000/slpp/auth/login', this.loginDetails)
 					.then((res) => {
-						this.$router.push('dashboard');
+						this.$router.push('/');
 					})
 					.catch((err) => {
 						console.error(err);
