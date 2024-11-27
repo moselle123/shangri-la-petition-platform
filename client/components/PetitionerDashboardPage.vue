@@ -30,7 +30,7 @@
 			<el-text size="large" tag="b">{{ isCreatingPetition ? 'Create a petition' : selectedPetition?.title }}</el-text>
 			<template v-if="selectedPetition">
 				<el-tag :type="selectedPetition?.status === 'open' ? 'success' : 'danger'">{{selectedPetition?.status}}</el-tag>
-				<el-tag v-if="!selectedPetition?.response">Awaiting Response</el-tag>
+				<el-tag v-if="!selectedPetition?.response" type="warning">Awaiting Response</el-tag>
 			</template>
 		</template>
 		<create-petition-dialog v-if="isCreatingPetition" @newPetition="petitionCreated" />
