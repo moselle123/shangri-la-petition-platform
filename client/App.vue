@@ -5,7 +5,7 @@
 				<el-menu-item>
 					<el-text size="large" tag="b">Shangri-La Petition Platform</el-text>
 				</el-menu-item>
-				<el-menu-item @click="logout">Logout</el-menu-item>
+				<el-menu-item v-if="pageName !== 'Login' && pageName !== 'Register'" @click="logout">Logout</el-menu-item>
 			</el-menu>
 		</el-header>
 		<el-main>
@@ -15,10 +15,10 @@
 </template>
 <script>
 export default {
-	data() {
-		return {
-
-		};
+	computed: {
+		pageName() {
+			return this.$route.name;
+		},
 	},
 	methods: {
 		logout() {
