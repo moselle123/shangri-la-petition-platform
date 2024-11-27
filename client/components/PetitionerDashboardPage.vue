@@ -126,5 +126,9 @@ export default {
 
 		cursor: pointer;
 	}
+
+	.el-text {
+		align-self: flex-start;
+	}
 }
 </style>
