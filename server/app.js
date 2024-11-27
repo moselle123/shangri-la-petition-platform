@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './db.js';
 import authRoutes from './routes/auth.js';
+import petitionRoutes from './routes/petitions.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/slpp/auth', authRoutes);
+app.use('/slpp/petitions', petitionRoutes);
 
 app.use("", express.static('dist'));
 let __dirname = path.resolve();
