@@ -89,7 +89,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/threshold', authenticate, (req, res) => {
-    	res.status(200).json({threshold: process.env.PETITION_THRESHOLD});
+	res.status(200).json({threshold: process.env.PETITION_THRESHOLD});
 });
 
 
