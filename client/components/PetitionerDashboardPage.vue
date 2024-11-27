@@ -91,7 +91,7 @@ export default {
 		},
 		petitionCreated(petition) {
 			this.getPetitions(petition);
-			this.selectPetition(this.selectPetition);
+			this.selectPetition(petition);
 			this.isCreatingPetition = false;
 		},
 		getThreshold() {
