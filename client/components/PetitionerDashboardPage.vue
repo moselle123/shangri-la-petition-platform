@@ -106,7 +106,6 @@ export default {
 		closeDialog() {
 			this.isCreatingPetition = false;
 			this.selectPetition = null;
-			console.debug('close modal')
 		}
 	},
 	mounted() {
