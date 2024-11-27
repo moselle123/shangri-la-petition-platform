@@ -79,6 +79,10 @@ router.post('/logout', (req, res) => {
 	res.status(200).send('Logged out successfully');
 });
 
+router.get('/user', authenticate, (req, res) => {
+	res.status(200).json({id: req.user.id});
+});
+
 router.post('/refresh-token', (req, res) => {
 	let refreshToken = req.cookies.refreshToken;
 

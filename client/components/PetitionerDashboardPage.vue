@@ -37,7 +37,7 @@
 			</template>
 		</template>
 		<create-petition-dialog v-if="isCreatingPetition" @newPetition="petitionCreated" />
-		<petition-info-dialog v-else-if="selectedPetition" :petition="selectedPetition" :threshold="threshold"/>
+		<petition-info-dialog v-else-if="selectedPetition" v-model="selectedPetition" :threshold="threshold" :userId="userId" />
 	</el-dialog>
 </template>
 <script>
@@ -50,6 +50,7 @@ export default {
 			selectedPetition: null,
 			isCreatingPetition: false,
 			threshold: null,
+			userId: null,
                 };
 	},
 	computed: {
@@ -65,6 +66,15 @@ export default {
 		showPetitionInfoDialog(petition) {
 			this.isDialogVisible = true;
 			this.selectedPetition = petition;
+		},
+		getUser() {
+			axios.get('http://localhost:3000/slpp/auth/user')
+			.then(({data}) => {
+				this.userId = data.id;
+			})
+			.catch((err) => {
+				console.error('Error in retrieving user:', err);
+			});
 		},
 		getPetitions() {
 			axios.get('http://localhost:3000/slpp/petitions')
@@ -100,6 +110,7 @@ export default {
 		}
 	},
 	mounted() {
+		this.getUser();
 		this.getThreshold();
 		this.getPetitions();
 	},

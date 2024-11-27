@@ -30,6 +30,9 @@ export default {
 		threshold: {
 			type: Number,
 		},
+		userId: {
+			type: String,
+		},
 	},
 	data() {
 		return {
