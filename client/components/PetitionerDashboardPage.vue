@@ -13,7 +13,7 @@
 		</el-row>
 		<el-row :gutter="20">
 			<el-col v-for="petition in filteredPetitions" key="petition" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-				<el-card @click="selectPetition(petition)">
+				<el-card body-class="petition-card" @click="selectPetition(petition)">
 					<template #header>
 						<el-text tag="b">{{petition.title}}</el-text>
 						<el-tag :type="petition.status === 'open' ? 'success' : 'danger'">{{petition.status}}</el-tag>

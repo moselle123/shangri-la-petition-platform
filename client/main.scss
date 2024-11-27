@@ -38,6 +38,12 @@ input[type=range]::-webkit-slider-thumb {
 		to   { transform: rotate(359deg); }
 	}
 
+	.petition-card {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+	}
+
 	// element plus overrides
 	.el-row {
 		width: 100%;
