@@ -14,6 +14,7 @@ router.post('/create', authenticate, (req, res) => {
 		title,
 		content,
 		petitioner: req.user.id,
+		signatures: [],
 	});
 
 	newPetition.save()
@@ -48,14 +49,15 @@ router.put('/sign/:id', authenticate, (req, res) => {
 		}
 
 		petition.signatures.push(userId);
-		petition.signatureCount += 1;
+		if (petition.signatures.length >= process.env.PETITION_THRESHOLD) {
+			petition.status = 'closed';
+		}
 		return petition.save();
 	})
 	.then((updatedPetition) => {
 		res.status(200).json({
 			message: 'Petition signed successfully',
-			petitionId: updatedPetition._id,
-			signatureCount: updatedPetition.signatureCount,
+			petition: updatedPetition,
 		});
 	})
 	.catch((err) => {
@@ -87,7 +89,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/threshold', authenticate, (req, res) => {
-    	res.json({threshold: process.env.PETITION_THRESHOLD});
+    	res.status(200).json({threshold: process.env.PETITION_THRESHOLD});
 });
 
 
