@@ -11,6 +11,8 @@ import LoginPage from './components/LoginPage.vue';
 import RegisterPage from './components/RegisterPage.vue';
 import PetitionerDashboardPage from './components/PetitionerDashboardPage.vue';
 import CommitteeDashboardPage from './components/CommitteeDashboardPage.vue';
+import CreatePetitionDialog from './components/CreatePetitionDialog.vue';
+import PetitionInfoDialog from './components/PetitionInfoDialog.vue';
 
 const routes = [
 	{
@@ -111,4 +113,6 @@ router.beforeEach((to, from, next) => {
 const app = createApp(App);
 app.use(router);
 app.use(ElementPlus);
+app.component('create-petition-dialog', CreatePetitionDialog);
+app.component('petition-info-dialog', PetitionInfoDialog);
 app.mount('#app');

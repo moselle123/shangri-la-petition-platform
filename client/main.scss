@@ -43,12 +43,6 @@ input[type=range]::-webkit-slider-thumb {
 		width: 100%;
 	}
 
-	.el-text {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-	}
-
 	.el-button {
 		width: 9em;
 
@@ -60,12 +54,49 @@ input[type=range]::-webkit-slider-thumb {
 		}
 	}
 
-	.el-card {
-		.el-card__header {
-			display: flex;
-			justify-content: space-between;
+	.el-dialog {
+		width: 90%;
+		max-width: 600px;
+	}
 
-			text-transform: capitalize;
+	.el-dialog__header, .el-card__header {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.5em;
+
+		.el-text {
+			flex: 1;
 		}
+	}
+
+	.el-tag {
+		text-transform: capitalize;
+	}
+
+	.el-progress--dashboard {
+		margin: 0 auto;
+
+		.el-progress-circle {
+			text-align: center;
+		}
+
+		.el-progress__text {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 7px;
+
+			width: 126px;
+			height: 126px;
+
+			.el-text {
+				align-self: center !important;
+			}
+		}
+	}
+
+	.el-divider {
+		margin: 0.5em 0;
 	}
 }
