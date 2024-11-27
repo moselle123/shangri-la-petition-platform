@@ -2,11 +2,16 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
+import authenticate from '../middleware/authenticate.js';
 
 let router = express.Router();
 
 router.post('/register', (req, res) => {
-	User.findOne({ email: req.body.email })
+	let {email, name, password, dob, bioId} = req.body;
+	if (!(email && name && password && dob && bioId)) {
+		res.status(400).json({ status: 400, message: 'Insufficient data provided.' });
+	}
+	User.findOne({ email })
 	.then((existingUser) => {
 		if (existingUser) {
 			return Promise.reject({ status: 400, message: 'Email is already in use.' });
@@ -15,12 +20,12 @@ router.post('/register', (req, res) => {
 	})
 	.then((hashedPassword) => {
 		let newUser = new User({
-			email: req.body.email,
-			name: req.body.name,
+			email,
+			name,
 			password: hashedPassword,
-			dob: req.body.dob,
-			bioId: req.body.bioId,
-			role: req.body.role,
+			dob,
+			bioId,
+			role,
 		});
 
 		return newUser.save();

@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 
 let userSchema = new mongoose.Schema({
 	email: {type: String, required: true, unique: true},
-	name: {type: String, required: true},
+	name: {type: String},
 	password: {type: String, required: true},
-	dob: {type: Date, required: true},
-	bioId: {type: String, required: true},
+	dob: {type: Date},
+	bioId: {type: String},
 	role: {type: String, default: 'petitioner'},
 });
 
