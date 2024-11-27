@@ -7,7 +7,6 @@ const petitionSchema = new mongoose.Schema({
 	status: {type: String, default: 'open'},
 	response: {type: String},
 	signatures: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    	signatureCount: { type: Number, default: 0 }
 }, { timestamps: true });
 
 let Petition = mongoose.model('Petition', petitionSchema);
