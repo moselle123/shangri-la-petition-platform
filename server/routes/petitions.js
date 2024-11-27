@@ -29,7 +29,7 @@ router.post('/create', authenticate, (req, res) => {
 	});
 });
 
-router.put('/sign-petition/:id', authenticate, async (req, res) => {
+router.put('/sign/:id', authenticate, (req, res) => {
 	let petitionId = req.params.id;
 	let userId = req.user.id;
 
