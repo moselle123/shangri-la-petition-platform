@@ -77,8 +77,9 @@ axios.interceptors.response.use(
 		return response;
 	},
 	(err) => {
-		if (err.response && err.response.status === 401) {
-			axios.post('/api/auth/refresh-token', {}, { withCredentials: true })
+		if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+			console.error('Token expired attempting to refresh token.')
+			axios.post('http://localhost:3000/slpp/auth/refresh-token', {}, { withCredentials: true })
 			.then((refreshResponse) => {
 				let newAccessToken = refreshResponse.data.accessToken;
 				err.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
