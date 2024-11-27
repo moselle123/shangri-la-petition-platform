@@ -30,7 +30,7 @@
 				</el-col>
 			</el-row>
 		</el-form>
-		<el-button @click="register">Register</el-button>
+		<el-button @click="register" type="primary">Register</el-button>
 		<el-text class="login-link" @click="login">Already have an account? Login here.</el-text>
 	</el-container>
 </template>

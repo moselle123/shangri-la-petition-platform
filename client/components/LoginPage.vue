@@ -1,7 +1,7 @@
 <template>
 	<el-container class="login" direction="vertical">
-		<el-text size="large">Login</el-text>
-		<el-form ref="form" status-icon :rules="rules" label-width="200px" :model="loginDetails">
+		<el-text size="large" tag="b">Login</el-text>
+		<el-form ref="form" status-icon :rules="rules" label-width="80px" :model="loginDetails">
 			<el-alert v-if="isAccessDenied" title="Email or password incorrect, please try again." type="error" />
 			<el-alert v-if="isValidAlert" title="Fix errors in form before continuing" type="error" />
 			<el-alert v-if="isServerError" title="Server error, please try again later." type="error" />
@@ -12,7 +12,7 @@
 				<el-input v-model="loginDetails.password" type="password" placeholder="Enter your password"></el-input>
 			</el-form-item>
 		</el-form>
-		<el-button @click="login">Login</el-button>
+		<el-button @click="login" type="primary">Login</el-button>
 		<el-text class="register-link" @click="register">Don't have an account? Register here.</el-text>
 	</el-container>
 </template>
