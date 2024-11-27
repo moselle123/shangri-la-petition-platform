@@ -42,7 +42,7 @@ export default {
 						this.$emit('newPetition', data.petition);
 					})
 					.catch((err) => {
-						console.debug('Error in creating petition:', err);
+						console.error('Error in creating petition:', err);
 					});
 				} else {
 					this.isValidAlert = true;
