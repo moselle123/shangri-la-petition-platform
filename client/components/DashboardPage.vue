@@ -1,15 +1,13 @@
 <template>
 	<el-container class="dashboard" direction="vertical">
-		<el-text size="large">
-			This platform allows citizens of Shangri-La to create or sign petitions
-			on matter within the government’s responsibility. Any citizen can propose a petition on topics they care about.
-			Once a petition reaches the signature threshold set by the Petitions Committee, it then qualifies for
-			parliamentary debate. After the debate, the Petitions Committee issues a summary response of behalf of the
-			Parliament before formally closing the petition.
-		</el-text>
 		<el-row justify="space-between">
 			<el-input class="search-box" v-model="searchInput" placeholder="Search petitions" />
-			<el-button type="primary" @click="showCreatePetitionDialog">Create a Petition</el-button>
+			<el-radio-group v-model="filterBy">
+				<el-radio-button label="Open" value="open" />
+				<el-radio-button label="Closed" value="closed" />
+				<el-radio-button v-if="user.role === 'committee'" label="Awaiting Response" value="awaitingResponse" />
+			</el-radio-group>
+			<el-button v-if="user.role === 'petitioner'" type="primary" @click="showCreatePetitionDialog">Create a Petition</el-button>
 		</el-row>
 		<el-row :gutter="20">
 			<el-col v-for="petition in filteredPetitions" key="petition" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -20,7 +18,7 @@
 						<el-tag v-if="!petition?.response" type="warning">Awaiting Response</el-tag>
 					</template>
 					<el-text>{{petition.content}}</el-text>
-					<el-text tag="b">{{petition.signatures.length}} signatures</el-text>
+					<el-text tag="b">{{petition.signatures.length}} {{petition.signatures.length === 1 ? 'signature' : 'signatures'}}</el-text>
 				</el-card>
 			</el-col>
 		</el-row>
@@ -33,8 +31,8 @@
 				<el-tag v-if="!selectedPetition?.response" type="warning">Awaiting Response</el-tag>
 			</template>
 		</template>
-		<create-petition-dialog v-if="isCreatingPetition" @newPetition="petitionCreated" />
-		<petition-info-dialog v-else-if="selectedPetition" v-model="selectedPetition" :threshold="threshold" :userId="userId" />
+		<create-petition v-if="isCreatingPetition" @newPetition="petitionCreated" />
+		<petition-info v-else-if="selectedPetition" v-model="selectedPetition" :threshold="threshold" :user="user" />
 	</el-dialog>
 </template>
 <script>
@@ -47,7 +45,11 @@ export default {
 			selectedPetition: null,
 			isCreatingPetition: false,
 			threshold: null,
-			userId: null,
+			user: {
+				id: null,
+				role:null,
+			},
+			filterBy: null,
                 };
 	},
 	computed: {
@@ -67,7 +69,7 @@ export default {
 		getUser() {
 			axios.get('http://localhost:3000/slpp/auth/user')
 			.then(({data}) => {
-				this.userId = data.id;
+				Object.assign(this.user, data);
 			})
 			.catch((err) => {
 				console.error('Error in retrieving user:', err);
@@ -120,12 +122,16 @@ export default {
 		width: 40%;
 	}
 
-	.el-card {
+	.el-col {
 		margin-bottom: 1em;
-		height: 100%;
 
-		cursor: pointer;
+		.el-card {
+			height: 100%;
+
+			cursor: pointer;
+		}
 	}
+
 
 	.el-text {
 		align-self: flex-start;
