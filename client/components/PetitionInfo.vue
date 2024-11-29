@@ -16,7 +16,6 @@
 				<el-text>{{petition?.response}}</el-text>
 			</el-col>
 		</el-row>
-		<template v-if="petition.status === 'open' && !signed">
 			<el-divider />
 			<el-checkbox v-model="acknowledged" size="small" label="I understand that once I sign this petition I cannot withdraw my signature." />
 			<el-button @click="signPetition" type="primary" :disabled="!acknowledged">
@@ -25,8 +24,6 @@
 			</el-button>
 		</template>
 		<el-alert v-if="signed" type="success" title="You have signed this petition." show-icon :closable="false" />
-		<el-alert v-if="petition.status === 'closed'" type="info" title="This petition has met the required threshold and is no longer open for signatures." show-icon :closable="false" />
-
 	</el-container>
 </template>
 <script>
@@ -38,8 +35,6 @@ export default {
 		threshold: {
 			type: Number,
 		},
-		userId: {
-			type: String,
 		},
 	},
 	data() {
@@ -60,7 +55,6 @@ export default {
 			return this.petition.signatures.length ? this.petition?.signatures.length / this.threshold * 100 : 0;
 		},
 		signed() {
-			return this.petition.signatures.includes(this.userId)
 		}
 	},
 	methods: {
