@@ -9,26 +9,19 @@ import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginPage from './components/LoginPage.vue';
 import RegisterPage from './components/RegisterPage.vue';
-import PetitionerDashboardPage from './components/PetitionerDashboardPage.vue';
-import CommitteeDashboardPage from './components/CommitteeDashboardPage.vue';
-import CreatePetitionDialog from './components/CreatePetitionDialog.vue';
-import PetitionInfoDialog from './components/PetitionInfoDialog.vue';
+import DashboardPage from './components/DashboardPage.vue';
+import CreatePetition from './components/CreatePetition.vue';
+import PetitionInfo from './components/PetitionInfo.vue';
 
 const routes = [
 	{
 		path: '/',
-		redirect: '/dashboard/petitioner',
+		redirect: '/dashboard/',
 	},
 	{
-		path: '/dashboard/petitioner',
-		name: 'PetitionerDashboard',
-		component: PetitionerDashboardPage,
-		meta: { requiresAuth: true },
-	},
-	{
-		path: '/dashboard/committee',
-		name: 'CommitteeDashboard',
-		component: CommitteeDashboardPage,
+		path: '/dashboard',
+		name: 'Dashboard',
+		component: DashboardPage,
 		meta: { requiresAuth: true },
 	},
 	{
@@ -54,7 +47,6 @@ import axios from 'axios';
 window.axios = axios;
 import { useCookies } from 'vue3-cookies';
 let {cookies} = useCookies();
-import { jwtDecode } from 'jwt-decode';
 
 axios.interceptors.request.use(
 	(config) => {
@@ -104,7 +96,7 @@ router.beforeEach((to, from, next) => {
 	if (to.meta.requiresAuth && !isAuthenticated) {
 	  	next('/login');
 	} else if (to.path === '/login' && isAuthenticated) {
-		jwtDecode(token).role === 'petitioner' ? next('/dashboard/petitioner') : next('/dashboard/committee');
+		next('/dashboard');
 	} else {
 	  	next();
 	}
@@ -113,6 +105,6 @@ router.beforeEach((to, from, next) => {
 const app = createApp(App);
 app.use(router);
 app.use(ElementPlus);
-app.component('create-petition-dialog', CreatePetitionDialog);
-app.component('petition-info-dialog', PetitionInfoDialog);
+app.component('create-petition', CreatePetition);
+app.component('petition-info', PetitionInfo);
 app.mount('#app');
