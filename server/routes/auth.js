@@ -85,7 +85,7 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/user', authenticate, (req, res) => {
-	res.status(200).json({id: req.user.id});
+	res.status(200).json({id: req.user.id, role: req.user.role});
 });
 
 router.post('/refresh-token', (req, res) => {
