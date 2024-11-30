@@ -40,6 +40,26 @@ router.post('/register', (req, res) => {
 	});
 });
 
+router.post('/register-admin', (req, res) => {
+	let {email, password, role} = req.body;
+	bcrypt.hash(req.body.password, 10)
+	.then((hashedPassword) => {
+		let newUser = new User({
+			email,
+			password: hashedPassword,
+			role,
+		});
+		return newUser.save()
+	})
+	.then((savedUser) => {
+		res.status(201);
+	})
+	.catch((err) => {
+		err.status === 400 ? res.status(400).send('Error creating user.') : res.status(500).send('Error creating user.');
+		console.error('Error creating user: ', err);
+	});
+});
+
 router.post('/login', async (req, res) => {
 	let user;
 	let { email, password } = req.body;
