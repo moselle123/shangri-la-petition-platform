@@ -22,7 +22,6 @@ router.post('/register', (req, res) => {
 	})
 	.then((existingUser) => {
 		if (existingUser) {
-			console.debug(existingUser)
 			return Promise.reject({ status: 400, message: 'Biometric ID is already in use.' });
 		}
 		return User.findOne({ email })
