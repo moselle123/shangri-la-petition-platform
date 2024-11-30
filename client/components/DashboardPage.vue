@@ -2,11 +2,6 @@
 	<el-container class="dashboard" direction="vertical">
 		<el-row justify="space-between">
 			<el-input class="search-box" v-model="searchInput" placeholder="Search petitions" />
-			<el-radio-group v-model="filterBy">
-				<el-radio-button label="Open" value="open" />
-				<el-radio-button label="Closed" value="closed" />
-				<el-radio-button v-if="user.role === 'committee'" label="Awaiting Response" value="awaitingResponse" />
-			</el-radio-group>
 			<el-button v-if="user.role === 'petitioner'" type="primary" @click="showCreatePetitionDialog">Create a Petition</el-button>
 		</el-row>
 		<el-row :gutter="20">
@@ -49,7 +44,6 @@ export default {
 				id: null,
 				role:null,
 			},
-			filterBy: null,
                 };
 	},
 	computed: {
