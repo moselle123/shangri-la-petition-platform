@@ -1,7 +1,7 @@
 import express from 'express';
 import authenticate from '../middleware/authenticate.js';
 import Petition from '../models/petition.js';
-import { updateThreshold, getSignatureThreshold } from '../models/variables.js';
+import {getThreshold, updateThreshold} from '../models/variables.js';
 
 let router = express.Router();
 
@@ -90,20 +90,14 @@ router.get('/', (req, res) => {
 });
 
 router.get('/threshold', authenticate, (req, res) => {
-	getSignatureThreshold()
-	.then((threshold) => {
-		res.status(200).json({threshold: threshold});
-	});
+	res.status(200).json({threshold: getThreshold()});
 });
 
 router.post('/threshold', authenticate, (req, res) => {
 	if (req.user.role !== 'committee') {
 		res.status(403).send('You must be a committee member to alter the threshold.');
 	} else {
-		updateThreshold(req.body.threshold)
-		.then((threshold) => {
-			res.status(200).json({threshold: threshold});
-		});
+		res.status(200).json({threshold: updateThreshold(req.body.threshold)});
 	}
 });
 

@@ -1,36 +1,38 @@
-import mongoose from "mongoose";
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+let __filename = fileURLToPath(import.meta.url);
+let __dirname = path.dirname(__filename);
+let filePath = path.resolve(__dirname, '../variables.json');
+let variables = {};
 
-let Variables = mongoose.model('Variables', {}, 'variables');
+fs.readFile(filePath, 'utf-8', (err, data) => {
+	if (err) {
+		console.error('Error reading file:', err);
+		return;
+	}
+	variables = JSON.parse(data);
+});
 
-export function getSignatureThreshold() {
-	return Variables.findOne({ _id: '67487ce4bb0529f6e1844676' })
-	.then((variables) => {
-		let threshold = variables.toObject().threshold;
-		return threshold;
-	})
-	.catch((err) => {
-		console.error("Error getting threshold:", err);
-	})
+function writeVariables() {
+    	return fs.writeFile(filePath, JSON.stringify(variables, null, 4), 'utf-8', (err) => {
+		if (err) {
+			console.error('Error reading file:', err);
+			return;
+		}
+	});
 }
 
-export function getValidBioIds() {
-	return Variables.findOne({ _id: '67487ce4bb0529f6e1844676' })
-	.then((variables) => {
-		let validBioIds = variables.toObject().validBioIds;
-		return validBioIds;
-	})
-	.catch((err) => {
-		console.error("Error getting valid bio ids:", err);
-	})
+export function getThreshold() {
+	return variables.threshold;
 }
 
 export function updateThreshold(newThreshold) {
-	return Variables.updateOne( { _id: '67487ce4bb0529f6e1844676' }, { threshold: newThreshold })
-	.then(({threshold}) => {
-		console.log("Threshold updated successfully");
-		return threshold;
-	})
-	.catch((err) => {
-		console.error("Error updating threshold:", err);
-	});
+	variables.threshold = newThreshold;
+	writeVariables();
+	return variables.threshold;
+}
+
+export function getValidBioIds() {
+	return variables.getValidBioIds;
 }
