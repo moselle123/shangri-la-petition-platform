@@ -1,7 +1,7 @@
 import express from 'express';
 import authenticate from '../middleware/authenticate.js';
 import Petition from '../models/petition.js';
-import { updateThreshold, getSignatureThreshold } from '../models/variables.js'
+import { updateThreshold, getSignatureThreshold } from '../models/variables.js';
 
 let router = express.Router();
 
