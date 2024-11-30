@@ -2,9 +2,7 @@
 	<el-container class="register" direction="vertical">
 		<el-text size="large">Register</el-text>
 		<el-form ref="form" status-icon :rules="rules" label-width="150px" :model="user">
-			<el-alert v-if="isExistingUser" title="These credentials match an existing user, please login." type="error" />
-			<el-alert v-if="isValidAlert" title="Fix errors in form before continuing" type="error" />
-			<el-alert v-if="isServerError" title="Server error, please try again later." type="error" />
+			<el-alert v-if="errorMessage" :title="errorMessage" type="error" />
 			<el-row justify="space-evenly">
 				<el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
 					<el-form-item label="Email" prop="email">
@@ -46,9 +44,7 @@ export default {
 				password: null,
 				bioId: null,
 			},
-			isValidAlert: false,
-			isExistingUser: false,
-			isServerError: false,
+			errorMessage: null,
 			confirmPasswordField: null,
 			rules: {
 				email: [
@@ -78,12 +74,17 @@ export default {
 		register() {
 			this.$refs['form'].validate(valid => {
 				if (valid) {
+					this.errorMessage = null;
 					axios.post('http://localhost:3000/slpp/auth/register', this.user)
 					.then(() => {
-						this.$router.push('login');
+						this.$router.push('/login');
 					})
 					.catch((err) => {
-						err.status === 400 ? this.isExistingUser = true : this.isServerError = true;
+						if (err.status === 400) {
+							this.errorMessage = err.response.data;
+						} else if (err.status === 500) {
+							this.errorMessage = 'Error creating user, please try again.'
+						}
 					});
 				} else {
 					this.isValidAlert = true;
@@ -114,6 +115,10 @@ export default {
 .register {
 	align-items: center;
 	gap: 4em;
+
+	.el-alert {
+		margin-bottom: 1em;
+	}
 
 	.divider {
 		height: 100%;
