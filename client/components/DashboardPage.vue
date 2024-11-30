@@ -76,7 +76,7 @@ export default {
 			});
 		},
 		getPetitions() {
-			axios.get('http://localhost:3000/slpp/petitions')
+			return axios.get('http://localhost:3000/slpp/petitions')
 			.then(({data}) => {
 				this.petitions = data.petitions;
 			})
@@ -94,7 +94,7 @@ export default {
 			this.isCreatingPetition = false;
 		},
 		getThreshold() {
-			axios.get('http://localhost:3000/slpp/petitions/threshold')
+			return axios.get('http://localhost:3000/slpp/petitions/threshold')
 			.then(({data}) => {
 				this.threshold = Number(data.threshold);
 			})

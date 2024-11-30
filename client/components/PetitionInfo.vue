@@ -73,7 +73,7 @@ export default {
 	},
 	methods: {
 		signPetition() {
-			axios.put('http://localhost:3000/slpp/petitions/sign/' + this.petition._id, {}, { withCredentials: true })
+			return axios.put('http://localhost:3000/slpp/petitions/sign/' + this.petition._id, {}, { withCredentials: true })
 			.then(({data}) => {
 				this.petition = data.petition;
 			})
@@ -82,7 +82,7 @@ export default {
 			});
 		},
 		respondToPetition() {
-			axios.put('http://localhost:3000/slpp/petitions/respond/' + this.petition._id, {response: this.newResponse}, { withCredentials: true })
+			return axios.put('http://localhost:3000/slpp/petitions/respond/' + this.petition._id, {response: this.newResponse}, { withCredentials: true })
 			.then(({data}) => {
 				this.newResponse = null;
 				this.petition = data.petition;
