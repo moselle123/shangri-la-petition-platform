@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import authenticate from '../middleware/authenticate.js';
+import {getValidBioIds} from '../models/variables.js';
 
 let router = express.Router();
 
@@ -11,7 +12,21 @@ router.post('/register', (req, res) => {
 	if (!(email && name && password && dob && bioId)) {
 		res.status(400).json({ status: 400, message: 'Insufficient data provided.' });
 	}
-	User.findOne({ email })
+
+	getValidBioIds()
+	.then((validIds) => {
+		if (!validIds.includes(bioId)) {
+			return Promise.reject({ status: 400, message: 'Invalid Biometric ID.' });
+		}
+		return User.findOne({ bioId })
+	})
+	.then((existingUser) => {
+		if (existingUser) {
+			console.debug(existingUser)
+			return Promise.reject({ status: 400, message: 'Biometric ID is already in use.' });
+		}
+		return User.findOne({ email })
+	})
 	.then((existingUser) => {
 		if (existingUser) {
 			return Promise.reject({ status: 400, message: 'Email is already in use.' });
@@ -25,7 +40,6 @@ router.post('/register', (req, res) => {
 			password: hashedPassword,
 			dob,
 			bioId,
-			role,
 		});
 
 		return newUser.save();
@@ -35,7 +49,7 @@ router.post('/register', (req, res) => {
 		res.status(201).json({token});
 	})
 	.catch((err) => {
-		err.status === 400 ? res.status(400).send('Error creating user.') : res.status(500).send('Error creating user.');
+		err.status === 400 ? res.status(400).send(err.message) : res.status(500).send('Error creating user.');
 		console.error('Error creating user: ', err);
 	});
 });
@@ -118,7 +132,7 @@ router.post('/refresh-token', (req, res) => {
 		if (err) {
 			return res.status(403).send('Invalid or expired refresh token');
 		}
-		let newAccessToken = jwt.sign({ id: user.id, role: user.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+		let newAccessToken = jwt.sign({ id: user.id, role: user.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1m' });
 		res.status(200).json({ accessToken: newAccessToken });
 	});
 });
