@@ -48,6 +48,20 @@ window.axios = axios;
 import { useCookies } from 'vue3-cookies';
 let {cookies} = useCookies();
 
+let isRefreshing = false;
+let failedQueue = [];
+
+function processQueue(error, token = null) {
+	failedQueue.forEach((promise) => {
+		if (error) {
+			promise.reject(error);
+		} else {
+			promise.resolve(token);
+		}
+	});
+	failedQueue = [];
+};
+
 axios.interceptors.request.use(
 	(config) => {
 		let token = cookies.get('authToken');
@@ -72,17 +86,43 @@ axios.interceptors.response.use(
 	},
 	(err) => {
 		if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+			let originalRequest = err.config;
+			if (originalRequest._retry) {
+				return Promise.reject(err);
+			}
+
+			originalRequest._retry = true;
+			if (isRefreshing) {
+				return new Promise((resolve, reject) => {
+				    	failedQueue.push({resolve, reject});
+				})
+				.then((token) => {
+					config.headers['Authorization'] = `Bearer ${token}`;
+					return axios(config);
+				})
+				.catch(error => Promise.reject(error));
+			}
+
+			isRefreshing = true;
 			console.error('Token expired attempting to refresh token.')
 			return axios.post('http://localhost:3000/slpp/auth/refresh-token', {}, { withCredentials: true })
 			.then((refreshResponse) => {
+				console.debug('Token successfully refreshed.')
 				let newAccessToken = refreshResponse.data.accessToken;
+				cookies.set('authToken', newAccessToken, { path: '/', expires: '15m' });
+				processQueue(null, newAccessToken);
 				err.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-				return axios(err.config);
+				return axios(originalRequest);
 			})
 			.catch((refreshError) => {
 				console.error('Token refresh failed:', refreshError);
+				cookies.remove('authToken');
 				router.push('/login');
+				processQueue(refreshError, null);
 				return Promise.reject(refreshError);
+			})
+			.finally(() => {
+				isRefreshing = false;
 			});
 		}
 		return Promise.reject(err);
