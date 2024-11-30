@@ -67,6 +67,36 @@ router.put('/sign/:id', authenticate, (req, res) => {
 	});
 });
 
+router.put('/respond/:id', authenticate, (req, res) => {
+	let petitionId = req.params.id;
+	let response = req.body.response;
+
+	Petition.findById(petitionId)
+	.then((petition) => {
+		if (!petition) {
+			return res.status(404).json({ error: 'Petition not found' });
+		}
+
+		if (petition.response) {
+			return res.status(400).json({ error: 'This petition has already been responded to.' });
+		}
+
+		petition.response = response;
+		petition.status = 'closed'
+		return petition.save();
+	})
+	.then((updatedPetition) => {
+		res.status(200).json({
+			message: 'Petition response sent.',
+			petition: updatedPetition,
+		});
+	})
+	.catch((err) => {
+		console.error('Error signing petition:', err);
+		res.status(500).json({ error: 'An error occurred while signing the petition' });
+	});
+});
+
 router.get('/', (req, res) => {
 	let { status, sort = '-createdAt' } = req.query;
 

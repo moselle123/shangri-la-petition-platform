@@ -24,7 +24,7 @@
 				Sign Petition
 			</el-button>
 		</template>
-		<template v-if="user.role === 'committee' && !petition.response">
+		<template v-if="user.role === 'committee' && !petition?.response && petition?.signatures.length >= threshold">
 			<el-divider />
 			<el-input type="textarea" v-model="newResponse" placeholder="Write a response to this petition."></el-input>
 			<el-button @click="respondToPetition" type="primary" :disabled="!newResponse">
@@ -33,7 +33,7 @@
 			</el-button>
 		</template>
 		<el-alert v-if="signed" type="success" title="You have signed this petition." show-icon :closable="false" />
-		<el-alert v-if="petition.status === 'closed' && user.role ==='petitioner'" type="info" title="This petition has met the required threshold and is no longer open for signatures." show-icon :closable="false" />
+		<el-alert v-if="petition.status === 'closed' && user.role ==='petitioner'" type="info" title="This petition has received a response and is no longer open for signatures." show-icon :closable="false" />
 	</el-container>
 </template>
 <script>
@@ -65,7 +65,8 @@ export default {
 			},
 		},
 		percentage() {
-			return this.petition.signatures.length ? this.petition?.signatures.length / this.threshold * 100 : 0;
+			let percentage = this.petition.signatures.length ? this.petition?.signatures.length / this.threshold * 100 : 100;
+
 		},
 		signed() {
 			return this.petition.signatures.includes(this.user.id)
@@ -76,6 +77,7 @@ export default {
 			return axios.put('http://localhost:3000/slpp/petitions/sign/' + this.petition._id, {}, { withCredentials: true })
 			.then(({data}) => {
 				this.petition = data.petition;
+				this.$emit('petitionUpdated');
 			})
 			.catch((err) => {
 				console.error('Error in retrieving petition threshold:', err);
@@ -86,6 +88,7 @@ export default {
 			.then(({data}) => {
 				this.newResponse = null;
 				this.petition = data.petition;
+				this.$emit('petitionUpdated');
 			})
 			.catch((err) => {
 				console.error('Error in retrieving responding to petition:', err);
