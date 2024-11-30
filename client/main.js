@@ -12,6 +12,7 @@ import RegisterPage from './components/RegisterPage.vue';
 import DashboardPage from './components/DashboardPage.vue';
 import CreatePetition from './components/CreatePetition.vue';
 import PetitionInfo from './components/PetitionInfo.vue';
+import SetThreshold from './components/SetThreshold.vue';
 
 const routes = [
 	{
@@ -147,4 +148,5 @@ app.use(router);
 app.use(ElementPlus);
 app.component('create-petition', CreatePetition);
 app.component('petition-info', PetitionInfo);
+app.component('set-threshold', SetThreshold);
 app.mount('#app');
