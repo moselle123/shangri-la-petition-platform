@@ -65,7 +65,10 @@ export default {
 			},
 		},
 		percentage() {
-			let percentage = this.petition.signatures.length ? this.petition?.signatures.length / this.threshold * 100 : 100;
+			if (this.petition.signatures.length > this.threshold) {
+				return 100;
+			}
+			return this.petition.signatures.length ? this.petition?.signatures.length / this.threshold * 100 : 100;
 
 		},
 		signed() {
@@ -78,9 +81,11 @@ export default {
 			.then(({data}) => {
 				this.petition = data.petition;
 				this.$emit('petitionUpdated');
+				this.acknowledged = false;
 			})
 			.catch((err) => {
 				console.error('Error in retrieving petition threshold:', err);
+				this.acknowledged = false;
 			});
 		},
 		respondToPetition() {

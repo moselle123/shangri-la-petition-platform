@@ -25,7 +25,7 @@
 			<el-text size="large" tag="b">{{ isCreatingPetition ? 'Create a petition' : selectedPetition?.title }}</el-text>
 			<template v-if="selectedPetition">
 				<el-tag :type="selectedPetition?.status === 'open' ? 'success' : 'danger'">{{selectedPetition?.status}}</el-tag>
-				<el-tag v-if="!selectedPetition?.response && (petition?.signatures.length >= threshold)" type="warning">Awaiting Response</el-tag>
+				<el-tag v-if="!selectedPetition?.response && (selectedPetition?.signatures.length >= threshold)" type="warning">Awaiting Response</el-tag>
 			</template>
 		</template>
 		<create-petition v-if="isCreatingPetition && user.role === 'petitioner'" @newPetition="petitionCreated" />
