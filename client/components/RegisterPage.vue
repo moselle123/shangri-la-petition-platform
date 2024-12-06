@@ -22,8 +22,10 @@
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+					<div v-if="!scanSuccessful" id="reader" class="qrReader"></div>
+					<el-alert v-else type="success" title="QR code scanned successfully." />
 					<el-form-item label="Biometric ID" prop="bioId">
-						<el-input v-model="user.bioId" placeholder="Enter your ID or scan the QR code below."/>
+						<el-input v-model="user.bioId" placeholder="Enter your ID or scan the QR code above."/>
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -46,6 +48,8 @@ export default {
 			},
 			errorMessage: null,
 			confirmPasswordField: null,
+			qrCodeReader: null,
+			scanSuccessful: null,
 			rules: {
 				email: [
 					{required: true, message: 'Email is required'},
@@ -108,6 +112,43 @@ export default {
 				callback();
 			}
 		},
+		onScanSuccess(decodedText, decodedResult) {
+			this.user.bioId = decodedText;
+			this.qrCodeReader.stop()
+			.catch((err) => {
+				console.error("Failed to stop scanning:", err);
+			});
+			this.scanSuccessful = true;
+		},
+		startQrScanner() {
+			navigator.mediaDevices
+			.getUserMedia({ video: true })
+			.then((stream) => {
+				stream.getTracks().forEach((track) => track.stop());
+				this.qrCodeReader.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } }, this.onScanSuccess.bind(this))
+				.catch((err) => {
+					console.error("Failed to start QR code scanning:", err);
+				});
+			})
+			.catch((err) => {
+				console.error("Camera permission denied:", err);
+				alert(
+					"Camera access is required to scan QR codes. Please enable camera permissions in your browser settings."
+				);
+			});
+		}
+	},
+	mounted() {
+		this.qrCodeReader = new Html5Qrcode("reader");
+		this.startQrScanner();
+	},
+	beforeDestroy() {
+		if (this.qrCodeReader) {
+			this.qrCodeReader.stop()
+			.catch((err) => {
+				console.error("Error stopping QR code scanner:", err);
+			});
+		}
 	},
 };
 </script>
@@ -142,6 +183,13 @@ export default {
 		text-decoration: underline;
 
 		cursor: pointer;
+	}
+
+	.qrReader {
+		margin: 0 auto 1em;
+		width: 300px;
+
+		border: 2px solid var(--el-border-color);
 	}
 }
 </style>
