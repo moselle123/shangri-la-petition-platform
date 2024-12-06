@@ -69,7 +69,7 @@ export default {
 
 		},
 		signed() {
-			return this.petition.signatures.includes(this.user.id)
+			return this.petition.signatures.includes(this.user.email)
 		}
 	},
 	methods: {

@@ -44,7 +44,7 @@ router.post('/register', (req, res) => {
 		return newUser.save();
 	})
 	.then((savedUser) => {
-		let token = jwt.sign({id: savedUser._id, role: savedUser.role}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1h'});
+		let token = jwt.sign({email: savedUser.email, role: savedUser.role}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1h'});
 		res.status(201).json({token});
 	})
 	.catch((err) => {
@@ -73,7 +73,7 @@ router.post('/register-admin', (req, res) => {
 	});
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', (req, res) => {
 	let user;
 	let { email, password } = req.body;
 	User.findOne({ email })
@@ -87,8 +87,8 @@ router.post('/login', async (req, res) => {
 	})
 	.then((authenticated) => {
 		if (authenticated) {
-			let accessToken = jwt.sign({id: user._id, role: user.role}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'});
-			let refreshToken = jwt.sign({id: user._id, role: user.role}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'});
+			let accessToken = jwt.sign({email: user.email, role: user.role}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'});
+			let refreshToken = jwt.sign({email: user.email, role: user.role}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'});
 
 			res.cookie('refreshToken', refreshToken, {
 				httpOnly: true,
@@ -118,7 +118,7 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/user', authenticate, (req, res) => {
-	res.status(200).json({id: req.user.id, role: req.user.role});
+	res.status(200).json({email: req.user.email, role: req.user.role});
 });
 
 router.post('/refresh-token', (req, res) => {
@@ -131,7 +131,7 @@ router.post('/refresh-token', (req, res) => {
 		if (err) {
 			return res.status(403).send('Invalid or expired refresh token');
 		}
-		let newAccessToken = jwt.sign({ id: user.id, role: user.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1m' });
+		let newAccessToken = jwt.sign({ email: user.email, role: user.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1m' });
 		res.status(200).json({ accessToken: newAccessToken });
 	});
 });

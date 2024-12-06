@@ -14,7 +14,7 @@ router.post('/create', authenticate, (req, res) => {
 	let newPetition = new Petition({
 		title,
 		content,
-		petitioner: req.user.id,
+		petitioner: req.user.email,
 		signatures: [],
 	});
 
@@ -33,7 +33,7 @@ router.post('/create', authenticate, (req, res) => {
 
 router.put('/sign/:id', authenticate, (req, res) => {
 	let petitionId = req.params.id;
-	let userId = req.user.id;
+	let userEmail = req.user.email;
 
 	Petition.findById(petitionId)
 	.then((petition) => {
@@ -45,11 +45,11 @@ router.put('/sign/:id', authenticate, (req, res) => {
 			return res.status(400).json({ error: 'This petition is closed for signatures' });
 		}
 
-		if (petition.signatures.includes(userId)) {
+		if (petition.signatures.includes(userEmail)) {
 			return res.status(400).json({ error: 'You have already signed this petition' });
 		}
 
-		petition.signatures.push(userId);
+		petition.signatures.push(userEmail);
 		if (petition.signatures.length >= process.env.PETITION_THRESHOLD) {
 			petition.status = 'closed';
 		}

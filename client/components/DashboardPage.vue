@@ -45,7 +45,7 @@ export default {
 			isSettingThreshold: false,
 			threshold: null,
 			user: {
-				id: null,
+				email: null,
 				role:null,
 			},
                 };
