@@ -5,6 +5,7 @@
 			<el-button v-if="user.role === 'petitioner'" type="primary" @click="showCreatePetitionDialog">Create a Petition</el-button>
 			<el-button v-else-if="user.role === 'committee'" type="primary" @click="showSetThresholdDialog">Set Threshold</el-button>
 		</el-row>
+		<committee-charts v-if="user.role === 'committee'" :petitions="petitions" />
 		<el-row :gutter="20">
 			<el-text v-if="filteredPetitions.length === 0" size="large" style="margin: 0 auto">No petitions found</el-text>
 			<el-col v-for="petition in filteredPetitions" key="petition" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">

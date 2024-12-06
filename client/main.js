@@ -13,6 +13,7 @@ import DashboardPage from './components/DashboardPage.vue';
 import CreatePetition from './components/CreatePetition.vue';
 import PetitionInfo from './components/PetitionInfo.vue';
 import SetThreshold from './components/SetThreshold.vue';
+import CommitteeCharts from './components/CommitteeCharts.vue';
 
 const routes = [
 	{
@@ -146,10 +147,15 @@ router.beforeEach((to, from, next) => {
 import { Html5Qrcode } from 'html5-qrcode';
 window.Html5Qrcode = Html5Qrcode;
 
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+window.Chart = Chart;
+
 const app = createApp(App);
 app.use(router);
 app.use(ElementPlus);
 app.component('create-petition', CreatePetition);
 app.component('petition-info', PetitionInfo);
 app.component('set-threshold', SetThreshold);
+app.component('committee-charts', CommitteeCharts);
 app.mount('#app');
