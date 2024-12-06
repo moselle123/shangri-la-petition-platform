@@ -34,5 +34,5 @@ export function updateThreshold(newThreshold) {
 }
 
 export function getValidBioIds() {
-	return variables.getValidBioIds;
+	return variables.validBioIds;
 }

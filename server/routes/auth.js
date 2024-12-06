@@ -13,13 +13,11 @@ router.post('/register', (req, res) => {
 		res.status(400).json({ status: 400, message: 'Insufficient data provided.' });
 	}
 
-	getValidBioIds()
-	.then((validIds) => {
-		if (!validIds.includes(bioId)) {
-			return Promise.reject({ status: 400, message: 'Invalid Biometric ID.' });
-		}
-		return User.findOne({ bioId })
-	})
+	if (!getValidBioIds().includes(bioId)) {
+		res.status(400).json({ status: 400, message: 'Invalid Biometric ID.' });
+	}
+
+	User.findOne({ bioId })
 	.then((existingUser) => {
 		if (existingUser) {
 			return Promise.reject({ status: 400, message: 'Biometric ID is already in use.' });
