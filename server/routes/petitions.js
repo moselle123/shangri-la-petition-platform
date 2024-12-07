@@ -108,6 +108,40 @@ router.get('/', (req, res) => {
 	Petition.find(query)
 	.sort(sort)
 	.then((petitions) => {
+		let formattedPetitions = [];
+		petitions.forEach((petition) => {
+			formattedPetitions.push({
+				petition_id: petition.id,
+				status: petition.status,
+				petition_title: petition.title,
+				petition_text: petition.content,
+				petitioner: petition.petitioner,
+				signatures: petition.signatures.length,
+				response: petition?.response,
+			});
+		});
+		res.status(200).json({
+			message: 'Petitions retrieved successfully',
+			petitions: formattedPetitions,
+		});
+	})
+	.catch((err) => {
+		console.error('Error fetching petitions:', err);
+		res.status(500).json({error: 'Error fetching petitions'});
+	});
+});
+
+router.get('/all', authenticate, (req, res) => {
+	let { status, sort = '-createdAt' } = req.query;
+
+	let query = {};
+	if (status) {
+		query.status = status
+	};
+
+	Petition.find(query)
+	.sort(sort)
+	.then((petitions) => {
 		res.status(200).json({
 			message: 'Petitions retrieved successfully',
 			petitions,

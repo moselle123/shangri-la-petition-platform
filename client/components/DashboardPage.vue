@@ -85,7 +85,7 @@ export default {
 			});
 		},
 		getPetitions() {
-			return axios.get('http://localhost:3000/slpp/petitions')
+			return axios.get('http://localhost:3000/slpp/petitions/all')
 			.then(({data}) => {
 				this.petitions = data.petitions;
 			})
