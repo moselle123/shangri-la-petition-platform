@@ -3,7 +3,7 @@
 		<el-text>{{petition.content}}</el-text>
 		<el-divider />
 		<el-row justify="space-evenly" align="middle">
-			<el-col :xs="7" :sm="7" :md="7" :lg="7" :xl="7">
+			<el-col :xs="24" :sm="7" :md="7" :lg="7" :xl="7">
 				<el-progress type="dashboard" :percentage="percentage">
 					<template #default>
 						<el-text>{{petition?.signatures.length}}</el-text>
@@ -11,7 +11,7 @@
 					</template>
 				</el-progress>
 			</el-col>
-			<el-col v-if="petition?.response" class="response" :xs="16" :sm="16" :md="16" :lg="16" :xl="16">
+			<el-col v-if="petition?.response" class="response" :xs="24" :sm="16" :md="16" :lg="16" :xl="16">
 				<el-text tag="i">Response:</el-text>
 				<el-text>{{petition?.response}}</el-text>
 			</el-col>
@@ -108,6 +108,11 @@ export default {
 
 	.el-text {
 		align-self: flex-start;
+	}
+
+	.el-col {
+		display: flex;
+		justify-content: center;
 	}
 
 	.response {
