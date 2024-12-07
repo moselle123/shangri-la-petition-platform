@@ -151,6 +151,9 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 window.Chart = Chart;
 
+import WordCloud from 'wordcloud';
+window.WordCloud = WordCloud;
+
 const app = createApp(App);
 app.use(router);
 app.use(ElementPlus);
