@@ -7,6 +7,7 @@
 		</el-form>
 		<el-row justify="end">
 			<el-button @click="setThreshold" :disabled="!newThreshold || newThreshold === threshold" type="primary">Update Threshold</el-button>
+			<el-alert :type="alertStatus" :title="alertMessage" />
 		</el-row>
 	</el-container>
 </template>
@@ -20,6 +21,8 @@ export default {
 	data() {
 		return {
 			newThreshold: null,
+			alertMessage: null,
+			alertStatus: null,
 		};
 	},
 	computed: {
@@ -36,11 +39,22 @@ export default {
 		setThreshold() {
 			axios.post('http://localhost:3000/slpp/petitions/threshold', {threshold: this.newThreshold}, { withCredentials: true })
 			.then(({data}) => {
+				this.setAlert('success');
 				this.threshold = Number(data.threshold);
 			})
 			.catch((err) => {
+				this.setAlert('danger');
 				console.error('Error in updating threshold:', err);
 			});
+		},
+		setAlert(status) {
+			this.alertMessage = status === 'success' ? 'Threshold changed successfully' : 'Error setting threshold, please try again.';
+			this.alertStatus = status;
+
+			setTimeout(() => {
+				this.alertMessage = null;
+				this.alertStatus = null;
+			}, 3000);
 		},
 	},
 	mounted() {
