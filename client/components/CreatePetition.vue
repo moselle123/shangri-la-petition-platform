@@ -27,6 +27,7 @@ export default {
 				],
 				content: [
 					{required: true, message: 'Content is required'},
+					{max: 200, message: 'Maximum content length is 200 characters', trigger: 'blur'},
 				],
 			},
 		};
