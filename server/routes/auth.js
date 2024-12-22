@@ -11,10 +11,12 @@ router.post('/register', (req, res) => {
 	let {email, name, password, dob, bioId} = req.body;
 	if (!(email && name && password && dob && bioId)) {
 		res.status(400).json({ status: 400, message: 'Insufficient data provided.' });
+		return;
 	}
 
 	if (!getValidBioIds().includes(bioId)) {
-		res.status(400).json({ status: 400, message: 'Invalid Biometric ID.' });
+		res.status(400).send('Invalid Biometric ID.');
+		return;
 	}
 
 	User.findOne({ bioId })
