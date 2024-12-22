@@ -7,13 +7,13 @@
 		</el-row>
 		<committee-charts v-if="user.role === 'committee'" :petitions="petitions" />
 		<el-row :gutter="20">
-			<el-text v-if="filteredPetitions.length === 0" size="large" style="margin: 0 auto">No petitions found</el-text>
+			<el-text v-if="filteredPetitions.length === 0" size="large" style="margin: 0 auto;">No petitions found</el-text>
 			<el-col v-for="petition in filteredPetitions" key="petition" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 				<el-card body-class="petition-card" @click="showPetitionInfoDialog(petition)">
 					<template #header>
 						<el-text tag="b">{{petition.title}}</el-text>
 						<el-tag :type="petition.status === 'open' ? 'success' : 'danger'">{{petition.status}}</el-tag>
-						<el-tag v-if="!petition?.response && (petition?.signatures.length >= threshold)" type="warning">Awaiting Response</el-tag>
+						<el-tag v-if="!petition?.response && threshold && (petition?.signatures.length >= threshold)" type="warning">Awaiting Response</el-tag>
 					</template>
 					<el-text>{{petition.content}}</el-text>
 					<el-text tag="b">{{petition.signatures.length}} {{petition.signatures.length === 1 ? 'signature' : 'signatures'}}</el-text>
