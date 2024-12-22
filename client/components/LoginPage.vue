@@ -2,9 +2,7 @@
 	<el-container class="login" direction="vertical">
 		<el-text size="large" tag="b">Login</el-text>
 		<el-form ref="form" status-icon :rules="rules" label-width="80px" :model="loginDetails">
-			<el-alert v-if="isAccessDenied" title="Email or password incorrect, please try again." type="error" />
-			<el-alert v-if="isValidAlert" title="Fix errors in form before continuing" type="error" />
-			<el-alert v-if="isServerError" title="Server error, please try again later." type="error" />
+			<el-alert v-if="errorMessage" :title="errorMessage" type="error" />
 			<el-form-item label="Email" prop="email">
 				<el-input v-model="loginDetails.email" type="email" placeholder="Enter your email"></el-input>
 			</el-form-item>
@@ -24,7 +22,6 @@ export default {
 				email: null,
 				password: null,
 			},
-			isValidAlert: false,
 			isAccessDenied: false,
 			isServerError: false,
 			rules: {
@@ -37,6 +34,7 @@ export default {
 					{validator: this.checkEmptyString, trigger: 'blur'},
 				],
 			},
+			errorMessage: null,
 		};
 	},
 	methods: {
@@ -45,20 +43,20 @@ export default {
 				this.isValidAlert, this.isAccessDenied, this.isServerError = false;
 				if (valid) {
 					axios.post('http://localhost:3000/slpp/auth/login', this.loginDetails)
-					.then((res) => {
+					.then(() => {
 						this.$router.push('/');
 					})
 					.catch((err) => {
 						console.error(err);
 						if (err.status === 401) {
-							this.isAccessDenied = true;
+							this.errorMessage = 'Email or password incorrect, please try again.';
 						}
 						if (err.status === 500) {
-							this.isServerError = true;
+							this.errorMessage = 'Server error, please try again later.';
 						}
 					});
 				} else {
-					this.isValidAlert = true;
+					this.errorMessage = 'Fix errors in form before continuing';
 				}
 			});
 		},
@@ -78,6 +76,10 @@ export default {
 <style lang="scss" scoped>
 .login {
 	align-items: center;
+
+	.el-alert {
+		margin-bottom: 1em;
+	}
 
 	.el-form {
 		max-width: 600px;

@@ -88,6 +88,11 @@ axios.interceptors.response.use(
 	},
 	(err) => {
 		if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+			if (err.config && err.config.url === 'http://localhost:3000/slpp/auth/login') {
+				console.debug('Login request detected, skipping refresh-token logic');
+				return Promise.reject(err);
+			}
+
 			let originalRequest = err.config;
 			if (originalRequest._retry) {
 				return Promise.reject(err);
