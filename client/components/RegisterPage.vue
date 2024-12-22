@@ -90,13 +90,14 @@ export default {
 							this.errorMessage = 'Error creating user, please try again.'
 						}
 					});
-				} else {
-					this.isValidAlert = true;
 				}
 			});
 		},
 		login() {
-			this.$router.push('login');
+			this.stopQrScanner();
+			setTimeout(() => {
+				this.$router.push('login');
+			}, 500);
 		},
 		checkEmptyString(rule, value, callback) {
 			if (!value.trim()) {
@@ -136,19 +137,28 @@ export default {
 					"Camera access is required to scan QR codes. Please enable camera permissions in your browser settings."
 				);
 			});
-		}
+		},
+		stopQrScanner() {
+			if (this.qrCodeReader) {
+				this.qrCodeReader.stop()
+				.catch((err) => {
+					console.error('Error stopping QR code scanner:', err);
+				});
+			}
+
+			navigator.mediaDevices.getUserMedia({ video: true })
+			.then((stream) => {
+				stream.getTracks().forEach((track) => track.stop());
+			})
+			.catch((err) => console.error('Error stopping camera tracks:', err));
+		},
 	},
 	mounted() {
 		this.qrCodeReader = new Html5Qrcode("reader");
 		this.startQrScanner();
 	},
 	beforeDestroy() {
-		if (this.qrCodeReader) {
-			this.qrCodeReader.stop()
-			.catch((err) => {
-				console.error("Error stopping QR code scanner:", err);
-			});
-		}
+        	this.stopQrScanner();
 	},
 };
 </script>
