@@ -21,6 +21,12 @@ export default {
 		},
 	},
 	methods: {
+		fetchNewAccessToken() {
+			return axios.post('http://localhost:3000/slpp/auth/refresh-token', {}, { withCredentials: true })
+			.then(() => {
+				this.$router.push('/dashboard');
+			});
+		},
 		logout() {
 			axios.post('http://localhost:3000/slpp/auth/logout')
 			.catch((err) => {
@@ -28,6 +34,9 @@ export default {
 			});
 		},
 	},
+	beforeMount() {
+		this.fetchNewAccessToken();
+	}
 };
 </script>
 <style lang="scss" scoped>
