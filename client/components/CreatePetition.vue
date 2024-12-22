@@ -44,8 +44,6 @@ export default {
 					.catch((err) => {
 						console.error('Error in creating petition:', err);
 					});
-				} else {
-					this.isValidAlert = true;
 				}
 			});
 		},
