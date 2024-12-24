@@ -5,11 +5,11 @@
 	</el-text>
 	<el-row class="charts">
 		<el-col  :xs="24" :sm="11" :md="11" :lg="11" :xl="11">
-			<el-text v-if="!loading">Top 3 Petitions</el-text>
+			<el-text v-if="!loading" tag="b">Top 3 Petitions</el-text>
 			<canvas ref="signaturesChart" style="width: 100%;"></canvas>
 		</el-col>
 		<el-col  :xs="24" :sm="11" :md="11" :lg="11" :xl="11">
-			<el-text v-if="!loading">Popular words</el-text>
+			<el-text v-if="!loading" tag="b">Commonly used words</el-text>
 			<canvas ref="wordCloud" style="width: 100%;"></canvas>
 		</el-col>
 	</el-row>
