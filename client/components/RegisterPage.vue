@@ -94,10 +94,10 @@ export default {
 			});
 		},
 		login() {
-			this.stopQrScanner();
-			setTimeout(() => {
-				this.$router.push('login');
-			}, 500);
+			if (!this.scanSuccessful) {
+				this.stopQrScanner();
+			}
+			this.$router.push('login');
 		},
 		checkEmptyString(rule, value, callback) {
 			if (!value.trim()) {
