@@ -92,7 +92,6 @@ axios.interceptors.response.use(
 				console.debug('Login request detected, skipping refresh-token logic');
 				return Promise.reject(err);
 			}
-
 			let originalRequest = err.config;
 			if (originalRequest._retry) {
 				return Promise.reject(err);
@@ -104,8 +103,8 @@ axios.interceptors.response.use(
 				    	failedQueue.push({resolve, reject});
 				})
 				.then((token) => {
-					config.headers['Authorization'] = `Bearer ${token}`;
-					return axios(config);
+					originalRequest.headers['Authorization'] = `Bearer ${token}`;
+					return axios(originalRequest);
 				})
 				.catch(error => Promise.reject(error));
 			}
