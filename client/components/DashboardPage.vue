@@ -1,5 +1,6 @@
 <template>
 	<el-container class="dashboard" direction="vertical">
+		<el-text v-if="user.role === 'petitioner'" size="large">Welcome to the Shangri-La Petition Platform, you can view and sign petitions below by clicking on the petition card. Or create your own petitions using the create petition button.</el-text>
 		<el-row justify="space-between">
 			<el-input class="search-box" v-model="searchInput" placeholder="Search petitions" />
 			<el-button v-if="user.role === 'petitioner'" type="primary" @click="showCreatePetitionDialog">Create a Petition</el-button>
